@@ -34,6 +34,7 @@ var formSubmitHandler = function(event) {
 
     if (username) {
         getUserRepos(username);
+        repoContainerEl.textContent = "";
         nameInputEl.value = "";
     } else {
         alert("Please enter a GitHub username")
@@ -42,11 +43,10 @@ var formSubmitHandler = function(event) {
 
 var displayRepos = function(repos, searchTerm) {
     if (repos.length === 0) {
-        reposContainerEl.textContent = "No Repositories Found.";
+        repoContainerEl.textContent = "No Repositories Found.";
         return;
     }
 
-    repoContainerEl.textContent = "";
     repoSearchTerm.textContent = searchTerm;
 
     // loop over repos
@@ -55,12 +55,15 @@ var displayRepos = function(repos, searchTerm) {
         var repoName = repos[i].owner.login + "/" + repos[i].name;
 
         // create a container for each repo
-        var repoEl = document.createElement("div");
+        var repoEl = document.createElement("a");
         repoEl.classList = "list-item flex-row justify-space-between align-center";
+        repoEl.setAttribute("href", "./single-repo.html?repo=" + repoName);
 
         // create a span element to hold repo name
         var titleEl = document.createElement("span");
-        titleEl.textContent = repoName;        
+        titleEl.textContent = repoName;    
+        
+        repoEl.appendChild(titleEl);
 
         // create a status element
         var statusEl = document.createElement("span");
@@ -75,7 +78,7 @@ var displayRepos = function(repos, searchTerm) {
 
         // append to container
         repoEl.appendChild(statusEl);
-        repoEl.appendChild(titleEl);
+        
 
         // append container to the DOM
         repoContainerEl.appendChild(repoEl);
